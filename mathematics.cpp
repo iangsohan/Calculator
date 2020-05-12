@@ -5,7 +5,7 @@
 using namespace std;
 
 Mathematics::Mathematics() {
-  stack<int> math;
+  stack<float> math;
 }
 
 bool Mathematics::empty() const {
@@ -17,15 +17,15 @@ void Mathematics::pop() {
     math.pop();
   } else {
     exit(-1);
-      }
+  }
 }
 
-void Mathematics::push(int x) {
+void Mathematics::push(float x) {
   math.push(x);
-  }
+}
 
 void Mathematics::add() {
-  int x, y;
+  float x, y;
   x = top();
   pop();
   y = top();
@@ -33,8 +33,8 @@ void Mathematics::add() {
   push(y + x);
 }
 
-void Mathematics::subtract() {
-  int x, y;
+void Mathematics::sub() {
+  float x, y;
   x = top();
   pop();
   y = top();
@@ -42,8 +42,8 @@ void Mathematics::subtract() {
   push(y - x);
 }
 
-void Mathematics::multiply() {
-  int x, y;
+void Mathematics::mul() {
+  float x, y;
   x = top();
   pop();
   y = top();
@@ -51,8 +51,8 @@ void Mathematics::multiply() {
   push(y * x);
 }
 
-void Mathematics::divide() {
-  int x, y;
+void Mathematics::div() {
+  float x, y;
   x = top();
   pop();
   y = top();
@@ -60,33 +60,25 @@ void Mathematics::divide() {
   push(y / x);
 }
 
-int power(int base, int expo) {
+float pow(float base, float expo) {
   if(expo > 1){
     expo = expo - 1;
-    return power(base, expo) * base;
+    return pow(base, expo) * base;
   } else if (expo == 0){
     return 1;
   } return base;
 }
 
-void Mathematics::exponent() {
-  int x, y;
+void Mathematics::exp() {
+  float x, y;
   x = top();
   pop();
   y = top();
   pop();
-  push(power(y, x));
+  push(pow(y, x));
 }
 
-void Mathematics::negate() {
-  int x;
-  x = top();
-  pop();
-  x = x * (-1);
-  push(x);
-}
-
-int Mathematics::top() const{
+float Mathematics::top() const{
   if(!empty()) {
     return math.top();
   } else {

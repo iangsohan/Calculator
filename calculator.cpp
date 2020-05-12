@@ -1,69 +1,58 @@
 #include<iostream>
-#include<string>
 #include<stack>
 #include<unordered_map>
-#include<algorithm>
+#include<vector>
 #include "mathematics.h"
 using namespace std;
 
-unordered_map<char, int> pemdas {{'+',1},{'-',1},{'*',2},{'/',2},{'^',3}};
+unordered_map<string, int> pemdas {{"+",1},{"-",1},{"*",2},{"/",2},{"^",3},{"(",4},{")", 4}};
 
-string infix(string s) {
-  string ifix = "";
-  stack<char> value;
-  stack<char> accum;
-  for (int i = 0; i < s.length(); i++) {
-    if (s[i] == ' ') i++;
-    if (pemdas.count(s[i]) == 0) value.push(s[i]);
+vector<string> infix(vector<string> s, string inpost) {
+  if (inpost == "POSTFIX") return s;
+  vector<string> value;
+  stack<string> accum;
+  for (int i = 0; i < s.size(); i++) {
+    if (pemdas.count(s[i]) == 0) value.push_back(s[i]);
+    else if (s[i] == ")") {
+      while (accum.top() != "(") {
+        value.push_back(accum.top());
+        accum.pop();
+      }
+      accum.pop();
+    }
     else if (accum.empty()) accum.push(s[i]);
-    else if (pemdas[accum.top()] <= pemdas[s[i]]) {
+    else if (pemdas[accum.top()] < pemdas[s[i]]) accum.push(s[i]);
+    else {
+      while (pemdas[accum.top()] >= pemdas[s[i]]) {
+        if (accum.top() == "(") break;
+        value.push_back(accum.top());
+        accum.pop();
+        if (accum.empty()) break;
+      }
       accum.push(s[i]);
-    } else {
-        while (pemdas[accum.top()] > pemdas[s[i]]) {
-          value.push(accum.top());
-          accum.pop();
-          accum.push(s[i]);
-        }
     }
   }
   while (!accum.empty()) {
-    value.push(accum.top());
+    value.push_back(accum.top());
     accum.pop();
   }
-  while (!value.empty()) {
-    ifix += value.top();
-    ifix += ' ';
-    value.pop();
-  }
-  reverse(ifix.begin(), ifix.end());
-  cout << ifix << endl;
-  return ifix;
+  return value;
 }
 
-int calculate() {
+float calculate() {
   Mathematics s;
   string token;
-  getline(cin, token);
-  token = infix(token);
-  for (int i = 0; i < token.length(); i++) {
-    if (token[i] == ' ') i++;
-    if (token[i] == '+') {
-      s.add();
-    } else if (token[i] == '-') {
-      s.subtract();
-    } else if (token[i] == '*') {
-      s.multiply();
-    } else if (token[i] == '/') {
-      s.divide();
-    } else if (token[i] == '^') {
-      s.exponent();
-    } else if (token[i] == '~') {
-      s.negate();
-    } else {
-      string num = "";
-      num += token[i];
-      s.push(stoi(num));
-    }
+  string inpost;
+  vector<string> value;
+  while(cin >> token) value.push_back(token);
+  value = infix(value, "INFIX");
+  for (int i = 0; i < value.size(); i++) {
+    if (value[i] == "+") s.add();
+    else if (value[i] == "-") s.sub();
+    else if (value[i] == "*") s.mul();
+    else if (value[i] == "/") s.div();
+    else if (value[i] == "^") s.exp();
+    else s.push(stof(value[i]));
   }
   cout << "RESULT: ";
   return s.top();
