@@ -11,16 +11,21 @@ class Mathematics {
 
   bool empty() const;
   void pop();
-  void push(float x);
+  void push(double x);
   void add();
   void sub();
   void mul();
   void div();
   void exp();
-  float top() const;
+  void log();
+  void ln();
+  void sin();
+  void cos();
+  void tan();
+  double top() const;
 
  private:
-  stack<float> math;
+  stack<double> math;
 };
 
 #endif
