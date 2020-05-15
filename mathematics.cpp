@@ -21,11 +21,15 @@ bool Mathematics::empty() const {
   return (math.size() == 0);
 }
 
+int Mathematics::size() {
+  return math.size();
+}
+
 void Mathematics::pop() {
   if(!empty()) {
     math.pop();
   } else {
-    exit(-1);
+    exit (-1);
   }
 }
 
@@ -69,6 +73,14 @@ void Mathematics::div() {
   push(y / x);
 }
 
+void Mathematics::neg() {
+  int x;
+  x = top();
+  pop();
+  x = x * (-1);
+  push(x);
+}
+
 double fac(double val) {
   if (val == 0) return 1.0;
   return val * fac(val-1);
@@ -77,9 +89,8 @@ double fac(double val) {
 double fpow(double x, double n) {
   double power = 0;
   double b = n * loge(x);
-  for (int i = 0; i < 19; i++) {
+  for (int i = 0; i < 19; i++)
     power += (pow(b, i) / fac(i));
-  }
   return power;
 }
 
@@ -108,7 +119,8 @@ void Mathematics::exp() {
 double log10(double val, int n = 7) {
   bool negative = false;
   int digit = 0.0;
-  if (val < 1 && n == 7) negative = true, val = 1/val;
+  if (val < 1 && n == 7)
+    negative = true, val = 1/val;
   if (n == 0) return 0.0;
   val = pow(val, 10);
   while (val > 10) {
