@@ -6,6 +6,7 @@
 #include<unordered_map>
 #include<vector>
 #include<stack>
+#include <QPushButton>
 using namespace std;
 
 unordered_set<string> operators {"+","－","*","/","^","log","ln","sin","cos","tan","(",")","-"};
@@ -95,7 +96,6 @@ CalculatorGUI::CalculatorGUI(QWidget *parent)
 
     ui->Display->setText(QString::number(ans));
 
-    QPushButton *buttons[30];
     for (int i = 0; i <= 30; i++) {
         QString butName = "Button" + QString::number(i);
         buttons[i] = CalculatorGUI::findChild<QPushButton *>(butName);

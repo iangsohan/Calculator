@@ -1,7 +1,8 @@
 #ifndef CALCULATORGUI_H
 #define CALCULATORGUI_H
 
-#include <QMainWindow>
+#include <QtWidgets/QMainWindow>
+#include <QPushButton>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class CalculatorGUI; }
@@ -17,6 +18,7 @@ public:
 
 private:
     Ui::CalculatorGUI *ui;
+    QPushButton *buttons[30];
 
 private slots:
     void ButtonPressed();
