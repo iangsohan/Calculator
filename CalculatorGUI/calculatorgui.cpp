@@ -1,91 +1,90 @@
-#include<iostream>
+#include <iostream>
+#include <unordered_set>
+#include <unordered_map>
+#include <vector>
+#include <string>
 #include "calculatorgui.h"
 #include "ui_calculatorgui.h"
 #include "mathematics.h"
-#include<unordered_set>
-#include<unordered_map>
-#include<vector>
-#include<stack>
-#include <QPushButton>
 using namespace std;
 
-unordered_set<string> operators {"+","－","*","/","^","log","ln","sin","cos","tan","(",")","-"};
+unordered_set<string> operators {"+","–","*","/","^","log","ln","sin","cos","tan","(",")","-"};
 unordered_set<string> beginners {"log","ln","sin","cos","tan","(","e","π","ans"};
-unordered_set<string> finishers {"+","－","*","/","^"};
-unordered_set<string> parenthes {"log","ln","sin","cos","tan"};
+unordered_set<string> finishers {"+","–","*","/","^"};
 unordered_set<string> constants {"e","π","ans"};
 
-unordered_map<string, int> pemdas {{"+",1},{"－",1},{"*",2},{"/",2},{"^",3},{"-",4},{"log",5},{"ln",5},
-                                   {"sin",5},{"cos",5},{"tan",5},{"(",6},{")",6},{"=",7}};
+unordered_map<string, int> pemdas {{"+",1},{"–",1},{"*",2},{"/",2},{"^",3},{"-",4},
+                                   {"log",5},{"ln",5},{"sin",5},{"cos",5},{"tan",5},{"(",6},{")",6}};
 
 double ans = 0;
 string mode = "RADIANS";
 vector<string> values;
 
 vector<string> infix(vector<string> s) {
-    vector<string> postfix;
-    stack<string> accum;
+    vector<string> postfix, accum;
     for (int i = 0; i < (int)s.size(); i++) {
         if (!pemdas.count(s[i]))
             postfix.push_back(s[i]);
         else if (accum.empty())
-            accum.push(s[i]);
-        // When a closing parentheses is found, every operator after the
-        // opening parentheses is added to the value postfix vector.
+            accum.push_back(s[i]);
+        // Interior Parentheses Equation
         else if (s[i] == ")") {
-            while (accum.top() != "(")
-                postfix.push_back(accum.top()), accum.pop();
-            accum.pop();
-        } else if (pemdas[accum.top()] < pemdas[s[i]])
-            accum.push(s[i]);
+            while (accum.back() != "(")
+                postfix.push_back(accum.back()), accum.pop_back();
+            accum.pop_back();
+        } else if (pemdas[accum.back()] < pemdas[s[i]])
+            accum.push_back(s[i]);
         else {
-            while (pemdas[accum.top()] >= pemdas[s[i]]) {
-                // Ignores opening parentheses once added to accumulator.
-                if (accum.top() == "(") break;
-                postfix.push_back(accum.top());
-                accum.pop();
-                if (accum.empty()) break;
+            while (pemdas[accum.back()] >= pemdas[s[i]]) {
+                // Ignores Opening Parentheses
+                if (accum.back() == "(")
+                    break;
+                postfix.push_back(accum.back());
+                accum.pop_back();
+                if (accum.empty())
+                    break;
             }
-            accum.push(s[i]);
+            accum.push_back(s[i]);
         }
     }
-    while (!accum.empty())
-        postfix.push_back(accum.top()), accum.pop();
+    while (!accum.empty()) {
+        postfix.push_back(accum.back());
+        accum.pop_back();
+    }
     return postfix;
 }
 
-void calculate(double ans, vector<string> x, string mode) {
-    Mathematics s;
+void calculate(double ans, vector<string> v, string mode) {
+    Mathematics m;
     string token;
-    if (x.empty())
+    if (v.empty())
         throw ans;
-    vector<string> postfix = infix(x);
+    vector<string> postfix = infix(v);
     for (int i = 0; i < (int)postfix.size(); i++) {
-        if (postfix[i] == "+") s.add();
-        else if (postfix[i] == "－") s.sub();
-        else if (postfix[i] == "*") s.mul();
-        else if (postfix[i] == "/") s.div();
-        else if (postfix[i] == "-") s.neg();
-        else if (postfix[i] == "^") s.exp();
-        else if (postfix[i] == "log") s.log();
-        else if (postfix[i] == "ln") s.ln();
-        else if (postfix[i] == "sin") s.sin(mode);
-        else if (postfix[i] == "cos") s.cos(mode);
-        else if (postfix[i] == "tan") s.tan(mode);
-        else if (postfix[i] == "e") s.push(2.7182818284);
-        else if (postfix[i] == "π") s.push(3.1415927);
-        else if (postfix[i] == "ans") s.push(ans);
+        if (postfix[i] == "+") m.add();
+        else if (postfix[i] == "–") m.sub();
+        else if (postfix[i] == "*") m.mul();
+        else if (postfix[i] == "/") m.div();
+        else if (postfix[i] == "-") m.neg();
+        else if (postfix[i] == "^") m.exp();
+        else if (postfix[i] == "log") m.log();
+        else if (postfix[i] == "ln") m.ln();
+        else if (postfix[i] == "sin") m.sin(mode);
+        else if (postfix[i] == "cos") m.cos(mode);
+        else if (postfix[i] == "tan") m.tan(mode);
+        else if (postfix[i] == "e") m.push(2.71828183);
+        else if (postfix[i] == "π") m.push(3.1415927);
+        else if (postfix[i] == "ans") m.push(ans);
         else {
-            // Decimal Problem
+            // Multiple Decimal Error
             if (postfix[i].find_first_of(".") != postfix[i].find_last_of("."))
                 throw "ERROR";
-            s.push(stod(postfix[i]));
+            m.push(stod(postfix[i]));
         }
     }
-    if (s.size() != 1)
+    if (m.size() != 1)
         throw "ERROR";
-    else
-        throw s.top();
+    throw m.top();
 }
 
 CalculatorGUI::CalculatorGUI(QWidget *parent)
@@ -112,7 +111,7 @@ void CalculatorGUI::ButtonPressed() {
     QString butVal = button->text();
     QString dispVal;
     values.push_back(butVal.toStdString());
-
+    // Previous Answer ASsumption
     if (values.size() == 1) {
         if (finishers.count(butVal.toStdString())) {
             values.pop_back();
@@ -121,7 +120,7 @@ void CalculatorGUI::ButtonPressed() {
         } else if (butVal == "⇐")
             butVal = "AC";
     }
-
+    // Special Buttons
     if (butVal == "=") {
         values.pop_back();
         try {
@@ -147,44 +146,35 @@ void CalculatorGUI::ButtonPressed() {
     } else {
         if (butVal == "⇐") {
             values.pop_back();
-            values.pop_back();
+            // Backspace Digits
+            if (!operators.count(values.back()) && !constants.count(values.back())) {
+                values.back().pop_back();
+                if (!values.back().length())
+                    values.pop_back();
+            } else
+                values.pop_back();
             if (!values.size())
                 dispVal = "0";
         } else if (values.size() > 1) {
-
-            // Negation Problem
-            if (finishers.count(butVal.toStdString()) && values[values.size()-2] == "-") {
+            // Negation
+            if (values[values.size()-2] == "-" && butVal.toStdString() == "-")
                 values.pop_back();
-            } else if (!operators.count(values[values.size()-2]) && butVal.toStdString() == "-") {
-                values.pop_back();
-            }
-
             // Implied Multiplication
-            else if (beginners.count(butVal.toStdString())) {
-                if (!operators.count(values[values.size()-2]) || values[values.size()-2] == ")") {
+            else if ((beginners.count(butVal.toStdString()) && (!operators.count(values[values.size()-2]) || values[values.size()-2] == ")")) ||
+                    ((constants.count(values[values.size()-2]) || values[values.size()-2] == ")") && !operators.count(butVal.toStdString()))) {
                     values.pop_back();
                     values.push_back("*");
                     values.push_back(butVal.toStdString());
-                }
-            } else if (constants.count(values[values.size()-2]) || values[values.size()-2] == ")") {
-                if (!operators.count(butVal.toStdString())) {
-                    values.pop_back();
-                    values.push_back("*");
-                    values.push_back(butVal.toStdString());
-                }
-
-            // Entering Numbers
-            } else if (!operators.count(butVal.toStdString())) {
-                if (!operators.count(values[values.size()-2])/* || values[values.size()-2] == "-"*/) {
-                    values.pop_back();
-                    values.back() += butVal.toStdString();
-                }
+            // Number Construction
+            } else if (!operators.count(butVal.toStdString()) && !operators.count(values[values.size()-2])) {
+                values.pop_back();
+                values.back() += butVal.toStdString();
             }
-
         }
-
-        if (parenthes.count(butVal.toStdString()))
+        // Operator Parentheses
+        if (operators.count(butVal.toStdString()) && butVal.toStdString() != "–" && butVal.toStdString().length() > 1)
             values.push_back("(");
+        // Display Value
         for (int i = 0; i < (int)values.size(); i++) {
             if (values[i] == "-")
                 dispVal += QString::fromStdString(values[i]);

@@ -1,8 +1,5 @@
-#include "calculatorgui.h"
-
 #include <QApplication>
-
-
+#include "calculatorgui.h"
 
 int main(int argc, char *argv[])
 {
