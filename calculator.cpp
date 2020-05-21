@@ -1,54 +1,50 @@
-#include<iostream>
-#include<stack>
-#include<unordered_map>
-#include<vector>
+#include <iostream>
+#include <unordered_map>
+#include <vector>
 #include "mathematics.h"
 using namespace std;
 
-// Variable mapping operators to their appropriate value order.
-unordered_map<string, int> pemdas {{"+",1},{"-",1},{"*",2},{"/",2},{"^",3},
-                                   // logarithmic
-                                   {"log",4},{"ln",4},
-                                   // trigonometric
-                                   {"sin",4},{"cos",4},{"tan",4},
-                                   // high-value
-                                   {"(",5},{")",5},{"(-)",5},{"=",6}};
+unordered_map<string, int> pemdas {{"+",1},{"-",1},{"*",2},{"/",2},{"^",3},{"~",4},
+                                   {"log",5},{"ln",5},{"sin",5},{"cos",5},{"tan",5},{"(",6},{")",6}};
 
-// Converts vector from infix to postfix.
+// Converts Infix to Postfix
 vector<string> infix(vector<string> s) {
-    vector<string> postfix;
-    stack<string> accum;
+    vector<string> postfix, accum;
     for (int i = 0; i < s.size(); i++) {
         if (!pemdas.count(s[i]))
             postfix.push_back(s[i]);
         else if (accum.empty())
-            accum.push(s[i]);
-        // When a closing parentheses is found, every operator after the
-        // opening parentheses is added to the value postfix vector. 
+            accum.push_back(s[i]);
+        // Interior Parentheses Equation
         else if (s[i] == ")") {
-            while (accum.top() != "(")
-                postfix.push_back(accum.top()), accum.pop();
-            accum.pop();
-        } else if (pemdas[accum.top()] < pemdas[s[i]])
-            accum.push(s[i]);
-        else {
-            while (pemdas[accum.top()] >= pemdas[s[i]]) {
-                // Ignores opening parentheses once added to accumulator.
-                if (accum.top() == "(") break;
-                postfix.push_back(accum.top());
-                accum.pop();
-                if (accum.empty()) break;
+            while (accum.back() != "(") {
+                postfix.push_back(accum.back());
+                accum.pop_back();
             }
-            accum.push(s[i]);
+            accum.pop_back();
+        } else if (pemdas[accum.back()] < pemdas[s[i]])
+            accum.push_back(s[i]);
+        else {
+            while (pemdas[accum.back()] >= pemdas[s[i]]) {
+                // Ignores Opening Parentheses
+                if (accum.back() == "(")
+                break;
+                postfix.push_back(accum.back());
+                accum.pop_back();
+                if (accum.empty())
+                break;
+            }
+            accum.push_back(s[i]);
         }
     }
-    while (!accum.empty())
-        postfix.push_back(accum.top()), accum.pop();
+    while (!accum.empty()) {
+        postfix.push_back(accum.back());
+        accum.pop_back();
+    }
     return postfix;
 }
 
-// Determines the necessary calculation for each operator and value.
-double calculate(double ans) {
+void calculate(double ans) {
     Mathematics s;
     string token;
     vector<string> postfix;
@@ -56,34 +52,45 @@ double calculate(double ans) {
         postfix.push_back(token);
     postfix = infix(postfix);
     for (int i = 0; i < postfix.size(); i++) {
-        // Operators
         if (postfix[i] == "+") s.add();
         else if (postfix[i] == "-") s.sub();
         else if (postfix[i] == "*") s.mul();
         else if (postfix[i] == "/") s.div();
-        else if (postfix[i] == "(-)") s.neg(); 
-        else if (postfix[i] == "^") s.exp(); 
+        else if (postfix[i] == "^") s.exp();
+        else if (postfix[i] == "~") s.neg(); 
         else if (postfix[i] == "log") s.log();
         else if (postfix[i] == "ln") s.ln();
-        else if (postfix[i] == "sin") s.sin();
-        else if (postfix[i] == "cos") s.cos();
-        else if (postfix[i] == "tan") s.tan();
-        // Constants
-        else if (postfix[i] == "e") s.push(2.7182818284);
-        else if (postfix[i] == "pi") s.push(3.141592653);
+        else if (postfix[i] == "sin") s.sin("RADIANS");
+        else if (postfix[i] == "cos") s.cos("RADIANS");
+        else if (postfix[i] == "tan") s.tan("RADIANS");
+        else if (postfix[i] == "e") s.push(2.71828183);
+        else if (postfix[i] == "pi") s.push(3.1415927);
         else if (postfix[i] == "ans") s.push(ans);
-        else s.push(stof(postfix[i]));
+        else {
+            if (postfix[i].find_first_of(".") != postfix[i].find_last_of("."))
+                throw false;
+            if (postfix[i].find_first_of("-") != postfix[i].find_last_of("-"))
+                throw false;
+            s.push(stod(postfix[i]));
+        }
     }
-    return s.top();
+    if (s.size() != 1)
+        throw false;
+    throw s.top();
 }
 
-// Calls calculate until user is finished.
 int main() {
-    string token;
+    bool x = true;
     double ans = 0.0;
-    while (true) {
-        ans = calculate(ans);
-        cout << ans << endl;
+    while (x) {
+        try {
+            calculate(ans);
+        } catch (double x) {
+            ans = x;
+            cout << ans << endl;
+        } catch (...) {
+            return 0;
+        }  
     }
     return 0;
 }
