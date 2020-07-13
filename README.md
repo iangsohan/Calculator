@@ -59,7 +59,7 @@ double log10(double val, int n = 7) {
 3. ``clang++ calculator.cpp mathematics.cpp``
 4. Separate Numbers and Operators with Spaces
 5. Press ``Enter`` After ``=``
-<br />
+
 ```
 -5 * log ( 10 ) - sin ( pi ) + 6 ^ ( 1 / 2 ) =
 -2.55051
