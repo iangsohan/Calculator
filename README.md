@@ -64,7 +64,7 @@ double log10(double val, int n = 7) {
 -5 * log ( 10 ) - sin ( pi ) + 6 ^ ( 1 / 2 ) =
 -2.55051
 ```
-5. Use ``Ctrl D`` to Terminate
+6. Use ``Ctrl D`` to Terminate
 
 > Qt Open Source:
 1. Download [Qt Open Source Installer](https://www.qt.io/download-thank-you?hsLang=en) Installer
