@@ -2,11 +2,11 @@
 
 ## Introduction
 
-> "Calculator" is a scientific calculator GUI designed with Qt-based C++. The GUI is designed for Windows computers, but the outline code for the calculator functions is also provided. Instead of the typical computer/phone calculator that allows only one operation at a time, "Calculator" allows a continuous equation to be calculated, given a valid function.
+"Calculator" is a scientific calculator GUI designed with Qt-based C++. The GUI is designed for Windows computers, but the outline code for the calculator functions is also provided. Instead of the typical computer/phone calculator that allows only one operation at a time, "Calculator" allows a continuous equation to be calculated, given a valid function.
 
 ## Code Samples
 
-> Fractional Exponents:
+Fractional Exponents:
 ```
 double fpow(double x, double n) {
     double power = 0;
@@ -18,7 +18,7 @@ double fpow(double x, double n) {
 ```
 <br />
 
-> Natural Logarithm:
+Natural Logarithm:
 ```
 double loge(double val) {
     return log10(val) / log10(e);
@@ -26,7 +26,7 @@ double loge(double val) {
 ```
 <br />
 
-> Common Logarithm:
+Common Logarithm:
 ```
 double log10(double val, int n = 7) {
     bool negative = false;
@@ -49,24 +49,23 @@ double log10(double val, int n = 7) {
 
 ## Installation
 
-> Windows Executable:
+Windows Executable:
 1. Download [ScientificCalc.exe](https://github.com/iangsohan/Calculator/blob/master/ScientificCalc.exe?raw=true)
 2. Perform Calculations in Infix Notation
 
-> Ubuntu Linux:
+Ubuntu Linux:
 1. Download [calculator.cpp](https://github.com/iangsohan/Calculator/blob/master/calculator.cpp), [mathematics.cpp](https://github.com/iangsohan/Calculator/blob/master/mathematics.cpp), and [mathematics.h](https://github.com/iangsohan/Calculator/blob/master/mathematics.h) into the same folder.
 2. Open Ubuntu Linux terminal.
 3. ``clang++ calculator.cpp mathematics.cpp``
 4. Separate Numbers and Operators with Spaces
 5. Press ``Enter`` After ``=``
-
 ```
 -5 * log ( 10 ) - sin ( pi ) + 6 ^ ( 1 / 2 ) =
 -2.55051
 ```
 6. Use ``Ctrl D`` to Terminate
 
-> Qt Open Source:
+Qt Open Source:
 1. Download [Qt Open Source Installer](https://www.qt.io/download-thank-you?hsLang=en) Installer
 2. Select Most Recent Version to Download
 3. Download [CalculatorQt](https://github.com/iangsohan/Calculator/tree/master/CalculatorQt) Folder
@@ -75,4 +74,4 @@ double log10(double val, int n = 7) {
 
 ## License
 
-> [MIT](https://choosealicense.com/licenses/mit/)
+[MIT](https://choosealicense.com/licenses/mit/)
