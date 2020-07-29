@@ -69,7 +69,7 @@ Qt Open Source:
 1. Download [Qt Open Source Installer](https://www.qt.io/download-thank-you?hsLang=en) Installer
 2. Select Most Recent Version to Download
 3. Download [CalculatorQt](https://github.com/iangsohan/Calculator/tree/master/CalculatorQt) Folder
-4. Open "Calculator" Project
+4. Open "CalculatorGUI" Project
 5. Select "Release" and "Build"
 
 ## License
