@@ -2,7 +2,7 @@
 
 ## Introduction
 
-"Calculator" is a scientific calculator GUI designed with Qt-based C++. The GUI is designed for Windows computers, but the outline code for the calculator functions is also provided. Instead of the typical computer/phone calculator that allows only one operation at a time, "Calculator" allows a continuous equation to be calculated, given a valid function.
+"Calculator" is a scientific calculator GUI designed with Qt-based C++. The GUI is designed for Windows computers, but the outline code for the calculator functions is also provided. Instead of the typical computer/phone calculator that allows only one operation at a time, "Calculator" allows a continuous equation to be calculated, given a valid function. Visit [Projects](http://iangsohan.com/projects.html) to see a visual.
 
 ## Code Samples
 
